@@ -33,7 +33,7 @@ excerpt_separator: "\n\n"
 # Serving
 detach:       false
 port:         4000
-host:         https://zhoulitong.github.io
+host:         127.0.0.1
 baseurl:      "" # does not include hostname
 
 # Outputting
@@ -46,7 +46,7 @@ timezone:      null
 title: Jekyll Theme
 description: Just another Jekyll theme design and code by zhanxin.info.
 keywords: Jekyll Theme
-url: /XiaoTongBolg
+url: /Bolg
 feed: /atom.xml
 favicon: http://jekyllrb.com/favicon.png
 
@@ -116,7 +116,7 @@ disqus:
 #################################### global configure #######################################
 
 username: zhoulitong
-baseurl: /XiaoTongBolg
+baseurl: /Bolg
 markdown: redcarpet
 safe: false
 highlighter: pygments
