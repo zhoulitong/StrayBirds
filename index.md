@@ -1,37 +1,39 @@
-## Welcome to GitHub Pages
+需求场景
+比如，现在工作流系统activiti和spring服务是相互独立，activiti服务不受springIOC管理，那么怎么在activiti里面应用spring提供的服务，这个就需要借助下面的这个小工具，见到这个工具类，总结下来，方便大家后期使用，我测试了在工作流系统调用spring管理的mapper依赖。其他场景如果没有用，那就当给大家提供一种思路吧！
+代码
+工具类代码：
+[java] view plain copy
+<span style="font-size:18px;">package cn.itcast.purchasing.util;  
+  
+import javax.servlet.http.HttpServletRequest;  
+  
+import org.springframework.context.ApplicationContext;  
+import org.springframework.web.context.request.RequestContextHolder;  
+import org.springframework.web.context.request.ServletRequestAttributes;  
+import org.springframework.web.context.support.WebApplicationContextUtils;  
+  
+public class ApplicationContextUtils {  
+      
+    private static ApplicationContext applicationContext;  
+      
+    public static ApplicationContext getApplicationContext(){  
+          
+        if(applicationContext == null){  
+            HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();  
+            applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());   
+              
+        }  
+        return applicationContext;  
+    }  
+}</span>  
 
-You can use the [editor on GitHub](https://github.com/zhoulitong/zhoulitong.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/zhoulitong/zhoulitong.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+应用实战代码：
+[java] view plain copy
+<span style="font-size:18px;">//通过工具类获取spring容器  
+private static ApplicationContext applicationContext = ApplicationContextUtils.getApplicationContext();  
+@Override  
+public void notify(DelegateExecution execution) throws Exception {  
+    //从spring容器中得到mapper  
+    PurBusOrderMapper purBusOrderMapper = (PurBusOrderMapper) applicationContext.getBean("purBusOrderMapper");  
+    purBusOrderMapper.updateByPrimaryKeySelective("要更新的实体对象");  
+}</span>  
